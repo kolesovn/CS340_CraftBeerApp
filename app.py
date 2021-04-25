@@ -5,24 +5,42 @@ import database.db_connector as db
 app = Flask(__name__)
 db_connection = db.connect_to_database()
 
+@app.route('/index')
+def root():
+        return render_template("index.j2")
+
 @app.route('/')
 def root():
         return render_template("main.j2")
 
-@app.route('/bsg-people')
-def bsg_people():
-        query = "SELECT * FROM bsg_db.sql"
-        cursor = db.execute_query(db_connection=db_connection, query=query)
-        results = cursor.fetchall()
-        return render_template("bsg.j2", bsg_people=results)
+@app.route('/product_search')
+def root():
+        return render_template("product_search.j2")
 
-@app.route('/task1')
-def task1():
-        query = "SELECT * FROM task1"
-        cursor = db.execute_query(db_connection=db_connection, query=query)
-        results = cursor.fetchall()
-        print(results)
-        return render_template("task1.j2", results=results)
+@app.route('/view_product_customer')
+def root():
+        return render_template("view_product_customer.j2")
+
+@app.route('/view_cart')
+def root():
+        return render_template("view_cart.j2")
+
+@app.route('/supplier_search')
+def root():
+        return render_template("supplier_search.j2")
+
+@app.route('/view_inventory')
+def root():
+        return render_template("view_inventory.j2")
+
+@app.route('/view_prduct_admin')
+def root():
+        return render_template("view_prduct_admin.j2")
+
+@app.route('/resupply_order')
+def root():
+        return render_template("resupply_order.j2")
+
 
 
 if __name__=="__main__":
