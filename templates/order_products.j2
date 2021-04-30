@@ -1,0 +1,21 @@
+{% extends "layout.j2" %}
+{% block content %}
+<h2>Order Products</h2>
+<br>
+<br>
+<table>
+    <tr>
+    {% for header in headers %}
+    <th> {{ header }} </th>
+    {% endfor %}
+    </tr>
+    {% for row in rows %}
+        <tr>
+        {% for cell in row %}
+            <td> {{ cell }} </td>
+        {% endfor %}
+        <td> <button type="button">Update</button> </td>
+        <td> <button type="button">Delete</button> </td>
+        </tr>
+    {% endfor %}
+{% endblock %}
