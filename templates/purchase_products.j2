@@ -3,6 +3,14 @@
 <h2>Purchase Products</h2>
 <br>
 <br>
+<h4>Add Purchase Products:</h4>
+<form action="/purchase_products" method="POST">
+   Purchase ID: <input type="text" name="pur_prod_pur_id" required>
+   Product ID: <input type="text" name="pur_prod_prod_id" required>
+   Quantity: <input type="text" name="pur_prod_quan" required>
+   <input type="submit" value="Submit">
+  </form>
+<br>
 <table>
     <tr>
     {% for header in headers %}

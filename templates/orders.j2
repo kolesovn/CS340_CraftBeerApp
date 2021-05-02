@@ -3,6 +3,14 @@
 <h2>Orders</h2>
 <br>
 <br>
+<h4>Add Order:</h4>
+<form action="/orders" method="POST">
+   Customer ID: <input type="text" name="ord_cid" required>
+   Date: <input type="text" name="ord_date" required>
+   <input type="submit" value="Submit">
+  </form>
+<br>
+
 <table>
     <tr>
     {% for header in headers %}

@@ -5,6 +5,42 @@ import os
 app = Flask(__name__)
 #db_connection = db.connect_to_database()
 
+#Sample data
+products_headers = ("Item_ID", "Name", "Supplier_ID", "Unit_cost", "Unit_price", "Quantity")
+products_data = [[1, "CCBC Tropicalia", 1, 10, 8, 100],
+        [2, "CCBC Bibo", 1, 9, 7, 100],
+        [3, "CCBC Silent World", 1, 10, 8, 50],
+        [4, "Allagash White", 2, 10, 8, 50],
+        [5, "Saison Dupont", 3, 12, 9, 25]]    
+
+customers_headers = ("Customer_ID", "Customer_name", "Customer_phone")
+customers_data = [[1, "Steve", "555-555-5555"],
+                [2, "John B", "444-444-4444"],
+                [3, "Steve 2", "333-333-3333"]]
+
+orders_headers = ("Order_ID", "Customer_ID", "Order_date")
+orders_data = [[1, 1, "2021-04-01"],
+                [2, 1, "2021-03-25"]]
+
+order_products_headers = ("Order_ID", "Product_ID", "Quantity")
+order_products_data = [[1, 2, 3],
+                        [1, 4, 1],
+                        [2, 1, 10]]
+
+purchase_products_headers = ("Purchase_ID", "Product_ID", "Quantity")
+purchase_products_data = [[1, 2, 5],
+                        [1, 3, 10],
+                        [2, 1, 15]]
+
+suppliers_headers = ("Supplier_ID", "Supplier_name", "Supplier_location", "Supplier_phone")
+suppliers_data = [[1, "Creature Comforts Brewing", "Athens, GA", "555-555-5551"],
+                [2, "Allagash Brewing", "Portland, ME", "111-111-1111"],
+                [3, "Brasserie Dupont", "Belgium", "222-222-2222"]]
+
+purchases_headers = ("Purchase_ID", "Supplier_ID", "Purchase_date")
+purchases_data = [[1, 1, "2021-04-21"],
+                [2, 1, "2021-04-10"]]
+
 
 @app.route('/')
 def root():
@@ -14,68 +50,74 @@ def root():
 def index():
         return render_template("index.j2")
 
-@app.route('/products')
+@app.route('/products', methods=["GET","POST"])
 def products():
-        headers = ("Item_ID", "Name", "Supplier_ID", "Unit_cost", "Unit_price", "Quantity")
-        data = [[1, "CCBC Tropicalia", 1, 10, 8, 100],
-                [2, "CCBC Bibo", 1, 9, 7, 100],
-                [3, "CCBC Silent World", 1, 10, 8, 50],
-                [4, "Allagash White", 2, 10, 8, 50],
-                [5, "Saison Dupont", 3, 12, 9, 25]]       
-        return render_template("products.j2", headers=headers, rows=data)
+        if request.method == "POST":
+                product_name = request.form['pname']
+                product_supplierID = request.form['p_sid']
+                product_cost = request.form['p_cost']
+                product_price = request.form['p_price']
+                product_quantity = request.form['p_quan']
+                products_data.append([len(products_data)+1, product_name, product_supplierID, product_cost, product_price, product_quantity])
+
+        return render_template("products.j2", headers=products_headers, rows=products_data)
 
 @app.route('/customers', methods=["GET","POST"])
 def customers():
-        headers = ("Customer_ID", "Customer_name", "Customer_phone")
-        rows = [[1, "Steve", "555-555-5555"],
-                [2, "John B", "444-444-4444"],
-                [3, "Steve 2", "333-333-3333"]]
-
         if request.method == "POST":
                 cname = request.form['cname']
                 cphone = request.form['cphone']
-                rows.append([len(rows)+1, cname, cphone])
-                print(rows)
+                customers_data.append([len(customers_data)+1, cname, cphone])
 
-        return render_template("customers.j2", headers=headers, rows=rows)
+        return render_template("customers.j2", headers=customers_headers, rows=customers_data)
 
-@app.route('/orders')
+@app.route('/orders', methods=["GET","POST"])
 def orders():
-        headers = ("Order_ID", "Customer_ID", "Order_date")
-        rows = [[1, 1, "2021-04-01"],
-                [2, 1, "2021-03-25"]]
-        return render_template("orders.j2", headers=headers, rows=rows)
+        if request.method == "POST":
+                order_customerID = request.form['ord_cid']
+                order_date = request.form['ord_date']
+                orders_data.append([len(orders_data)+1, order_customerID, order_date])
 
-@app.route('/order_products')
+        return render_template("orders.j2", headers=orders_headers, rows=orders_data)
+
+@app.route('/order_products', methods=["GET","POST"])
 def order_products():
-        headers = ("Order_ID", "Product_ID", "Quantity")
-        rows = [[1, 2, 3],
-                [1, 4, 1],
-                [2, 1, 10]]
-        return render_template("order_products.j2", headers=headers, rows=rows)
+        if request.method == "POST":
+                order_products_orderID = request.form['ord_prod_ord_id']
+                order_products_productID = request.form['ord_prod_prod_id']
+                order_products_quan = request.form['ord_prod_quan']
+                order_products_data.append([order_products_orderID, order_products_productID, order_products_quan])
 
-@app.route('/purchase_products')
+        return render_template("order_products.j2", headers=order_products_headers, rows=order_products_data)
+
+@app.route('/purchase_products', methods=["GET","POST"])
 def purchase_products():
-        headers = ("Purchase_ID", "Product_ID", "Quantity")
-        rows = [[1, 2, 5],
-                [1, 3, 10],
-                [2, 1, 15]]
-        return render_template("purchase_products.j2", headers=headers, rows=rows)
+        if request.method == "POST":
+                purchase_products_purchaseID = request.form['pur_prod_pur_id']
+                purchase_products_productID = request.form['pur_prod_prod_id']
+                purchase_products_quan = request.form['pur_prod_quan']
+                purchase_products_data.append([purchase_products_purchaseID, purchase_products_productID, purchase_products_quan])
 
-@app.route('/suppliers')
+        return render_template("purchase_products.j2", headers=purchase_products_headers, rows=purchase_products_data)
+
+@app.route('/suppliers', methods=["GET","POST"])
 def suppliers():
-        headers = ("Supplier_ID", "Supplier_name", "Supplier_location", "Supplier_phone")
-        rows = [[1, "Creature Comforts Brewing", "Athens, GA", "555-555-5551"],
-                [2, "Allagash Brewing", "Portland, ME", "111-111-1111"],
-                [3, "Brasserie Dupont", "Belgium", "222-222-2222"]]
-        return render_template("suppliers.j2", headers=headers, rows=rows)
+        if request.method == "POST":
+                sname = request.form['sname']
+                sloc = request.form['sloc']
+                sphone = request.form['sphone']
+                suppliers_data.append([len(suppliers_data)+1, sname, sloc, sphone])
 
-@app.route('/purchases')
+        return render_template("suppliers.j2", headers=suppliers_headers, rows=suppliers_data)
+
+@app.route('/purchases', methods=["GET","POST"])
 def purchases():
-        headers = ("Purchase_ID", "Supplier_ID", "Purchase_date")
-        rows = [[1, 1, "2021-04-21"],
-                [2, 1, "2021-04-10"]]
-        return render_template("purchases.j2", headers=headers, rows=rows)
+        if request.method == "POST":
+                purchase_supplierID = request.form['pur_sid']
+                purchase_date = request.form['pur_date']
+                purchases_data.append([len(purchases_data)+1, purchase_supplierID, purchase_date])
+
+        return render_template("purchases.j2", headers=purchases_headers, rows=purchases_data)
 
 @app.route('/view_inventory')
 def view_inventory():

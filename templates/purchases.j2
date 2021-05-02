@@ -3,6 +3,13 @@
 <h2>Purchases</h2>
 <br>
 <br>
+<h4>Add Purchase:</h4>
+<form action="/purchases" method="POST">
+   Supplier ID: <input type="text" name="pur_sid" required>
+   Date: <input type="text" name="pur_date" required>
+   <input type="submit" value="Submit">
+  </form>
+<br>
 <table>
     <tr>
     {% for header in headers %}
