@@ -50,6 +50,14 @@ def root():
 def index():
         return render_template("index.j2")
 
+@app.route('/db-test')
+def db_test():
+    query = "SELECT * FROM bsg_people;"
+    cursor = db.execute_query(db_connection=db_connection, query=query)
+    results = cursor.fetchall()
+    print(results)
+    return render_template("db_test.j2", bsg_people=results)
+
 @app.route('/products', methods=["GET","POST"])
 def products():
         if request.method == "POST":

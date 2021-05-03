@@ -53,7 +53,8 @@ def execute_query(db_connection = None, query = None, query_params = ()):
     # this will actually commit any changes to the database. without this no
     # changes will be committed!
     db_connection.commit()
-    cursor.close()
+    # cursor.close()
+    # print(cursor.fetchall())
     return cursor
 
 if __name__ == '__main__':
