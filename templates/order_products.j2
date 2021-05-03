@@ -23,7 +23,8 @@
             <td> {{ cell }} </td>
         {% endfor %}
         <td> <button type="button">Update</button> </td>
-        <td> <button type="button">Delete</button> </td>
+        <form action="/order_products" method="DELETE">
+            <td><input type="submit" value="Delete"></form></td>
         </tr>
     {% endfor %}
 {% endblock %}

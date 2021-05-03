@@ -1,9 +1,9 @@
 from flask import Flask, render_template, json, request
 import os
-#import database.db_connector as db
+import database.db_connector as db
 
 app = Flask(__name__)
-#db_connection = db.connect_to_database()
+db_connection = db.connect_to_database()
 
 #Sample data
 products_headers = ("Item_ID", "Name", "Supplier_ID", "Unit_cost", "Unit_price", "Quantity")
@@ -80,13 +80,16 @@ def orders():
 
         return render_template("orders.j2", headers=orders_headers, rows=orders_data)
 
-@app.route('/order_products', methods=["GET","POST"])
+@app.route('/order_products', methods=["GET","POST","DELETE"])
 def order_products():
         if request.method == "POST":
                 order_products_orderID = request.form['ord_prod_ord_id']
                 order_products_productID = request.form['ord_prod_prod_id']
                 order_products_quan = request.form['ord_prod_quan']
                 order_products_data.append([order_products_orderID, order_products_productID, order_products_quan])
+        elif request.method == "DELETE":
+                print(request.args)
+                print("test")
 
         return render_template("order_products.j2", headers=order_products_headers, rows=order_products_data)
 
