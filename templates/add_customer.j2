@@ -1,0 +1,10 @@
+{% extends "layout.j2" %}
+{% block content %}
+<h4>Add Customer:</h4>
+<form action="/add_customer" method="POST">
+   Name: <input type="text" name="cname" required>
+   Phone number: <input type="text" name="cphone" required>
+   <input type="submit" value="Submit">
+  </form>
+<br>
+{% endblock %}

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, json, request
+from flask import Flask, render_template, json, request, redirect, url_for
 import os
 import database.db_connector as db
 
@@ -72,12 +72,32 @@ def products():
 
 @app.route('/customers', methods=["GET","POST"])
 def customers():
+        if request.method == "GET":
+                query = "SELECT * FROM Customers;"
+                cursor = db.execute_query(db_connection=db_connection, query=query)
+                results = cursor.fetchall()
+                cursor.close()
+                return render_template("customers.j2", customers=results)
+
         if request.method == "POST":
                 cname = request.form['cname']
                 cphone = request.form['cphone']
                 customers_data.append([len(customers_data)+1, cname, cphone])
+        
 
         return render_template("customers.j2", headers=customers_headers, rows=customers_data)
+
+@app.route('/add_customer', methods=["GET","POST"])
+def add_customer():
+        if request.method == "POST":
+                cname = request.form['cname']
+                cphone = request.form['cphone']
+                query = 'INSERT INTO Customers (Customer_name, Customer_phone) VALUES (%s,%s)'
+                data = (cname, cphone)
+                cursor = db.execute_query(db_connection, query, data)
+                print('Added Customer')
+                return redirect(url_for('customers'))
+        return render_template('add_customer.j2')
 
 @app.route('/orders', methods=["GET","POST"])
 def orders():

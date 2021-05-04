@@ -29,6 +29,7 @@ def execute_query(db_connection = None, query = None, query_params = ()):
     You need to run .fetchall() or .fetchone() on that object to actually acccess the results.
 
     '''
+    db_connection.ping(True)
 
     if db_connection is None:
         print("No connection to the database found! Have you called connect_to_database() first?")

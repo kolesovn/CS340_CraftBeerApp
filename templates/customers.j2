@@ -3,23 +3,23 @@
 <h2>Customers</h2>
 <br>
 <br>
-<h4>Add Customer:</h4>
-<form action="/customers" method="POST">
+<h4><a href="/add_customer">Add Customer</a></h4>
+{# <form action="/customers" method="POST">
    Name: <input type="text" name="cname" required>
    Phone number: <input type="text" name="cphone" required>
    <input type="submit" value="Submit">
-  </form>
+  </form> #}
 <br>
 <table>
     <tr>
-    {% for header in headers %}
-    <th> {{ header }} </th>
+    {% for key in customers[0].keys() %}
+    <th> {{ key }} </th>
     {% endfor %}
     </tr>
-    {% for row in rows %}
+    {% for customer in customers %}
         <tr>
-        {% for cell in row %}
-            <td> {{ cell }} </td>
+        {% for key in customer.keys() %}
+            <td> {{ customer[key] }} </td>
         {% endfor %}
         <td> <button type="button">Update</button> </td>
         <td> <button type="button">Delete</button> </td>
