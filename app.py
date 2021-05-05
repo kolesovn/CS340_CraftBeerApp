@@ -92,6 +92,14 @@ def add_product():
                 return redirect(url_for('products'))
         return render_template('add_product.j2')
 
+@app.route('/delete_product/<int:id>')
+def delete_product(id):
+        query = 'DELETE FROM Products WHERE Product_id = %s'
+        data = (id,)
+        result = db.execute_query(db_connection, query, data)
+        print(str(result.rowcount) + " row deleted")
+        return redirect(url_for('products'))
+
 @app.route('/customers', methods=["GET","POST"])
 def customers():
         if request.method == "GET":

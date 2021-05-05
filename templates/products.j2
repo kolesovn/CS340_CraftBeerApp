@@ -19,7 +19,8 @@
             <td> {{ product[key] }} </td>
         {% endfor %}
         <td> <button type="button">Update</button> </td>
-        <td> <button type="button">Delete</button> </td>
+        <td><form action="/delete_product/{{ product['Product_id'] }}">
+                <input type="submit" value="Delete"></form></td>
         </tr>
     {% endfor %}
 {% endblock %}
