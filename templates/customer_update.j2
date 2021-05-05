@@ -1,0 +1,12 @@
+{% extends "layout.j2" %}
+{% block content %}
+<h2>Update Customer</h2>
+<br>
+<br>
+<form id="update_customer" action="/update_customer/{{ customer['Customer_id'] }}" method="POST">
+    <input type="hidden" name="cid" value="{{ customer['Customer_id'] }}">
+    Customer Name: <input type="text" name="cname" value="{{ customer['Customer_name'] }}"><br>
+    Customer Phone: <input type="text" name="cphone" value="{{ customer['Customer_phone'] }}"><br>
+    <input type="submit" value="Submit">
+    </form>
+{% endblock %}

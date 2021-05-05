@@ -21,7 +21,8 @@
         {% for key in customer.keys() %}
             <td> {{ customer[key] }} </td>
         {% endfor %}
-        <td> <button type="button">Update</button> </td>
+        <td> <form action ="/update_customer/{{ customer['Customer_id'] }}">
+                <input type="submit" value="Update"></form></td>
         <td> <button type="button">Delete</button> </td>
         </tr>
     {% endfor %}

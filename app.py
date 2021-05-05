@@ -119,6 +119,26 @@ def add_customer():
                 return redirect(url_for('customers'))
         return render_template('add_customer.j2')
 
+@app.route('/update_customer/<int:id>', methods=["GET","POST"])
+def update_customer(id):
+        if request.method == "GET":
+                customer_query = 'SELECT Customer_id, Customer_name, Customer_phone FROM Customers WHERE Customer_id = %s' % (id)
+                customer_result = db.execute_query(db_connection, customer_query).fetchone()
+                if not customer_result:
+                        return "No such Customer"
+                else:
+                        return render_template('customer_update.j2', customer=customer_result)
+        elif request.method == "POST":
+                print('The POST request')
+                customer_id = request.form['cid']
+                customer_name = request.form['cname']
+                customer_phone = request.form['cphone']
+                query = 'UPDATE Customers SET Customer_name = %s, Customer_phone = %s WHERE Customer_id = %s'
+                data = (customer_name, customer_phone, customer_id)
+                result = db.execute_query(db_connection, query, data)
+                print(str(result.rowcount) + " row(s) updated")
+                return redirect(url_for('customers'))
+
 @app.route('/orders', methods=["GET","POST"])
 def orders():
         if request.method == "POST":
