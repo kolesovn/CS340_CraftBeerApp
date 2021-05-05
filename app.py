@@ -60,15 +60,37 @@ def db_test():
 
 @app.route('/products', methods=["GET","POST"])
 def products():
-        if request.method == "POST":
-                product_name = request.form['pname']
-                product_supplierID = request.form['p_sid']
-                product_cost = request.form['p_cost']
-                product_price = request.form['p_price']
-                product_quantity = request.form['p_quan']
-                products_data.append([len(products_data)+1, product_name, product_supplierID, product_cost, product_price, product_quantity])
+        if request.method == "GET":
+                query = "SELECT * FROM Products;"
+                cursor = db.execute_query(db_connection=db_connection, query=query)
+                results = cursor.fetchall()
+                cursor.close()
+                return render_template("products.j2", products=results)
+        # if request.method == "POST":
+        #         product_name = request.form['pname']
+        #         product_supplierID = request.form['p_sid']
+        #         product_cost = request.form['p_cost']
+        #         product_price = request.form['p_price']
+        #         product_quantity = request.form['p_quan']
+        #         products_data.append([len(products_data)+1, product_name, product_supplierID, product_cost, product_price, product_quantity])
 
         return render_template("products.j2", headers=products_headers, rows=products_data)
+
+@app.route('/add_product', methods=["GET","POST"])
+def add_product():
+        if request.method == "POST":
+                pname = request.form['pname']
+                p_sid = request.form['p_sid']
+                p_cost = request.form['p_cost']
+                p_price = request.form['p_price']
+                p_quan = request.form['p_quan']
+                query = 'INSERT INTO Products (Product_name, Supplier_id, Unit_cost, Unit_price, Quantity) VALUES (%s,%s,%s,%s,%s)'
+                data = (pname,p_sid,p_cost,p_price,p_quan)
+                cursor = db.execute_query(db_connection, query, data)
+                print('Added product')
+                cursor.close()
+                return redirect(url_for('products'))
+        return render_template('add_product.j2')
 
 @app.route('/customers', methods=["GET","POST"])
 def customers():
@@ -78,13 +100,10 @@ def customers():
                 results = cursor.fetchall()
                 cursor.close()
                 return render_template("customers.j2", customers=results)
-
-        if request.method == "POST":
-                cname = request.form['cname']
-                cphone = request.form['cphone']
-                customers_data.append([len(customers_data)+1, cname, cphone])
-        
-
+        # if request.method == "POST":
+        #         cname = request.form['cname']
+        #         cphone = request.form['cphone']
+        #         customers_data.append([len(customers_data)+1, cname, cphone])
         return render_template("customers.j2", headers=customers_headers, rows=customers_data)
 
 @app.route('/add_customer', methods=["GET","POST"])
@@ -96,6 +115,7 @@ def add_customer():
                 data = (cname, cphone)
                 cursor = db.execute_query(db_connection, query, data)
                 print('Added Customer')
+                cursor.close()
                 return redirect(url_for('customers'))
         return render_template('add_customer.j2')
 
