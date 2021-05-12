@@ -204,7 +204,7 @@ def view_inventory():
 
 @app.route('/view_product_admin')
 def view_prduct_admin():
-        return render_template("view_prduct_admin.j2")
+        return render_template("view_product_admin.j2")
 
 @app.route('/view_product_customer')
 def view_product_customer():
