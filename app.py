@@ -6,10 +6,6 @@ app = Flask(__name__)
 db_connection = db.connect_to_database()
 
 #Sample data
-orders_headers = ("Order_ID", "Customer_ID", "Order_date")
-orders_data = [[1, 1, "2021-04-01"],
-                [2, 1, "2021-03-25"]]
-
 order_products_headers = ("Order_ID", "Product_ID", "Quantity")
 order_products_data = [[1, 2, 3],
                         [1, 4, 1],
@@ -118,12 +114,26 @@ def update_customer(id):
 
 @app.route('/orders', methods=["GET","POST"])
 def orders():
-        if request.method == "POST":
-                order_customerID = request.form['ord_cid']
-                order_date = request.form['ord_date']
-                orders_data.append([len(orders_data)+1, order_customerID, order_date])
+        if request.method == "GET":
+                query = "SELECT * FROM Orders;"
+                cursor = db.execute_query(db_connection=db_connection, query=query)
+                results = cursor.fetchall()
+                cursor.close()
+                return render_template("orders.j2", orders=results)
 
-        return render_template("orders.j2", headers=orders_headers, rows=orders_data)
+@app.route('/add_order', methods=["GET","POST"])
+def add_order():
+        if request.method == "POST":
+                ord_cid = request.form['ord_cid']
+                ord_date = request.form['ord_date']
+                query = 'INSERT INTO Orders (Customer_id, Order_date) VALUES (%s,%s)'
+                data = (ord_cid, ord_date)
+                cursor = db.execute_query(db_connection, query, data)
+                print('Added Order')
+                cursor.close()
+                return redirect(url_for('orders'))
+        return render_template('add_order.j2')
+
 
 @app.route('/order_products', methods=["GET","POST","DELETE"])
 def order_products():
