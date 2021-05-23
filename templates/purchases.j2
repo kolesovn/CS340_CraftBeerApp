@@ -3,23 +3,18 @@
 <h2>Purchases</h2>
 <br>
 <br>
-<h4>Add Purchase:</h4>
-<form action="/purchases" method="POST">
-   Supplier ID: <input type="text" name="pur_sid" required>
-   Date: <input type="text" name="pur_date" required>
-   <input type="submit" value="Submit">
-  </form>
+<h4><a href="add_purchase">Add Purchase</a></h4>
 <br>
 <table>
     <tr>
-    {% for header in headers %}
-    <th> {{ header }} </th>
+    {% for key in purchases[0].keys() %}
+    <th> {{ key }} </th>
     {% endfor %}
     </tr>
-    {% for row in rows %}
+    {% for purchase in purchases %}
         <tr>
-        {% for cell in row %}
-            <td> {{ cell }} </td>
+        {% for key in purchase.keys() %}
+            <td> {{ purchase[key] }} </td>
         {% endfor %}
         <td> <button type="button">Update</button> </td>
         <td> <button type="button">Delete</button> </td>

@@ -183,12 +183,26 @@ def add_supplier():
 
 @app.route('/purchases', methods=["GET","POST"])
 def purchases():
-        if request.method == "POST":
-                purchase_supplierID = request.form['pur_sid']
-                purchase_date = request.form['pur_date']
-                purchases_data.append([len(purchases_data)+1, purchase_supplierID, purchase_date])
+        if request.method == "GET":
+                query = "SELECT * FROM Purchases;"
+                cursor = db.execute_query(db_connection=db_connection, query=query)
+                results = cursor.fetchall()
+                cursor.close()
+                return render_template("purchases.j2", purchases=results)
 
-        return render_template("purchases.j2", headers=purchases_headers, rows=purchases_data)
+@app.route('/add_purchase', methods=["GET","POST"])
+def add_purchase():
+        if request.method == "POST":
+                pur_sid = request.form['pur_sid']
+                pur_date = request.form['pur_date']
+                query = 'INSERT INTO Purchases (Supplier_id, Purchase_date) VALUES (%s,%s)'
+                data = (pur_sid, pur_date)
+                cursor = db.execute_query(db_connection, query, data)
+                print('Added Purchase')
+                cursor.close()
+                return redirect(url_for('purchases'))
+        return render_template('add_purchase.j2')
+
 
 @app.route('/view_inventory')
 def view_inventory():
