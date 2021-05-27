@@ -1,0 +1,10 @@
+{% extends "layout.j2" %}
+{% block content %}
+<h4>Add Order:</h4>
+<form action="/add_order" method="POST">
+   Customer ID: <input type="text" name="ord_cid" required>
+   Date: <input type="text" name="ord_date" required>
+   <input type="submit" value="Submit">
+  </form>
+<br>
+{% endblock %}
