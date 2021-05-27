@@ -5,20 +5,25 @@
 <br>
 <h4><a href="/add_product"><button>Add Product</button></a></h4>
 <br>
-<div class="prod search"> <input type="text" placeholder="Search.."> </div>
+<form action="/products" method="POST">
+    <input type="text" name="psearch">
+    <input type="submit" value="Search">
+</form>
 <br>
 <table>
     <tr>
-    {% for key in products[0].keys() %}
-    <th> {{ key }} </th>
-    {% endfor %}
+    <th>ID</th>
+    <th>Name</th>
+    <th>Supplier</th>
+    <th>Cost</th>
+    <th>Price</th>
+    <th>Quantity</th>
     </tr>
     {% for product in products %}
         <tr>
         {% for key in product.keys() %}
             <td> {{ product[key] }} </td>
         {% endfor %}
-        <td> <button type="button">Update</button> </td>
         <td><form action="/delete_product/{{ product['Product_id'] }}">
                 <input type="submit" value="Delete"></form></td>
         </tr>

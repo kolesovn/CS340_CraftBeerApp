@@ -45,6 +45,15 @@ def products():
                 results = cursor.fetchall()
                 cursor.close()
                 return render_template("products.j2", products=results)
+        if request.method == "POST":
+                search_term = "%" + request.form['psearch'] +"%"
+                query = 'SELECT * FROM Products WHERE Product_name LIKE %s'
+                data = (search_term,)
+                cursor = db.execute_query(db_connection, query, data)
+                results = cursor.fetchall()
+                print('Searching Products table for {}'.format(search_term))
+                cursor.close()
+                return render_template("products.j2", products=results)
 
 @app.route('/add_product', methods=["GET","POST"])
 def add_product():
@@ -202,23 +211,6 @@ def add_purchase():
                 cursor.close()
                 return redirect(url_for('purchases'))
         return render_template('add_purchase.j2')
-
-
-@app.route('/view_inventory')
-def view_inventory():
-        return render_template("view_inventory.j2")
-
-@app.route('/view_product_admin')
-def view_prduct_admin():
-        return render_template("view_prduct_admin.j2")
-
-@app.route('/view_product_customer')
-def view_product_customer():
-        return render_template("view_product_customer.j2")
-
-@app.route('/view_cart')
-def view_cart():
-        return render_template("view_cart.j2")
 
 
 if __name__=="__main__":

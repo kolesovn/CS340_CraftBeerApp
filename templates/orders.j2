@@ -7,17 +7,15 @@
 <br>
 <table>
     <tr>
-    {% for key in orders[0].keys() %}
-    <th> {{ key }} </th>
-    {% endfor %}
+    <th>ID</th>
+    <th>Customer ID</th>
+    <th>Date</th>
     </tr>
     {% for order in orders %}
         <tr>
         {% for key in order.keys() %}
             <td> {{ order[key] }} </td>
         {% endfor %}
-        <td> <button type="button">Update</button> </td>
-        <td> <button type="button">Delete</button> </td>
         </tr>
     {% endfor %}
 {% endblock %}
