@@ -1,0 +1,11 @@
+{% extends "layout.j2" %}
+{% block content %}
+<h4>Add Purchase Product:</h4>
+<form action="/add_purchase_product" method="POST">
+   Purchase ID: <input type="text" name="pur_id" required>
+   Product ID: <input type="text" name="prod_id" required>
+   Quantity: <input type="text" name="quan" required>
+   <input type="submit" value="Submit">
+  </form>
+<br>
+{% endblock %}

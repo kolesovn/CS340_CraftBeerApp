@@ -3,28 +3,20 @@
 <h2>Order Products</h2>
 <br>
 <br>
-<h4>Add Order Products:</h4>
-<form action="/order_products" method="POST">
-   Order ID: <input type="text" name="ord_prod_ord_id" required>
-   Product ID: <input type="text" name="ord_prod_prod_id" required>
-   Quantity: <input type="text" name="ord_prod_quan" required>
-   <input type="submit" value="Submit">
-  </form>
+<h4><a href="/add_order_product"><button>Add Order Products</button></a></h4>
 <br>
 <table>
     <tr>
-    {% for header in headers %}
-    <th> {{ header }} </th>
-    {% endfor %}
+    <th>Order Product ID</th>
+    <th>Order ID</th>
+    <th>Product ID</th>
+    <th>Quantity</th>
     </tr>
-    {% for row in rows %}
+    {% for order_product in order_products %}
         <tr>
-        {% for cell in row %}
-            <td> {{ cell }} </td>
+        {% for key in order_product.keys() %}
+            <td> {{ order_product[key] }} </td>
         {% endfor %}
-        <td> <button type="button">Update</button> </td>
-        <form action="/order_products" method="DELETE">
-            <td><input type="submit" value="Delete"></form></td>
         </tr>
     {% endfor %}
 {% endblock %}
