@@ -6,19 +6,10 @@ app = Flask(__name__)
 db_connection = db.connect_to_database()
 
 #Sample data
-order_products_headers = ("Order_ID", "Product_ID", "Quantity")
-order_products_data = [[1, 2, 3],
-                        [1, 4, 1],
-                        [2, 1, 10]]
-
 purchase_products_headers = ("Purchase_ID", "Product_ID", "Quantity")
 purchase_products_data = [[1, 2, 5],
                         [1, 3, 10],
                         [2, 1, 15]]
-
-purchases_headers = ("Purchase_ID", "Supplier_ID", "Purchase_date")
-purchases_data = [[1, 1, "2021-04-21"],
-                [2, 1, "2021-04-10"]]
 
 
 @app.route('/')
@@ -144,28 +135,51 @@ def add_order():
         return render_template('add_order.j2')
 
 
-@app.route('/order_products', methods=["GET","POST","DELETE"])
+@app.route('/order_products', methods=["GET"])
 def order_products():
-        if request.method == "POST":
-                order_products_orderID = request.form['ord_prod_ord_id']
-                order_products_productID = request.form['ord_prod_prod_id']
-                order_products_quan = request.form['ord_prod_quan']
-                order_products_data.append([order_products_orderID, order_products_productID, order_products_quan])
-        elif request.method == "DELETE":
-                print(request.args)
-                print("test")
+        if request.method == "GET":
+                query = 'SELECT * FROM Order_products;'
+                cursor = db.execute_query(db_connection, query)
+                results = cursor.fetchall()
+                cursor.close()
+                return render_template("order_products.j2", order_products=results)
 
-        return render_template("order_products.j2", headers=order_products_headers, rows=order_products_data)
+@app.route('/add_order_product', methods=["GET","POST"])
+def add_order_product():
+        if request.method == "POST":
+                ord_id = request.form['ord_id']
+                prod_id = request.form['prod_id']
+                quantity = request.form['quan']
+                query = 'INSERT INTO Order_products (Order_id, Product_id, Quantity) VALUES (%s,%s,%s)'
+                data = (ord_id, prod_id, quantity)
+                cursor = db.execute_query(db_connection, query, data)
+                print('Added Order Product')
+                cursor.close()
+                return redirect(url_for('order_products'))
+        return render_template('add_order_product.j2')
 
 @app.route('/purchase_products', methods=["GET","POST"])
 def purchase_products():
-        if request.method == "POST":
-                purchase_products_purchaseID = request.form['pur_prod_pur_id']
-                purchase_products_productID = request.form['pur_prod_prod_id']
-                purchase_products_quan = request.form['pur_prod_quan']
-                purchase_products_data.append([purchase_products_purchaseID, purchase_products_productID, purchase_products_quan])
+        if request.method == "GET":
+                query = 'SELECT * FROM Purchase_products;'
+                cursor = db.execute_query(db_connection, query)
+                results = cursor.fetchall()
+                cursor.close()
+                return render_template("purchase_products.j2", purchase_products=results)
 
-        return render_template("purchase_products.j2", headers=purchase_products_headers, rows=purchase_products_data)
+@app.route('/add_purchase_product', methods=["GET","POST"])
+def add_purchase_product():
+        if request.method == "POST":
+                pur_id = request.form['pur_id']
+                prod_id = request.form['prod_id']
+                quantity = request.form['quan']
+                query = 'INSERT INTO Purchase_products (Purchase_id, Product_id, Quantity) VALUES (%s,%s,%s)'
+                data = (pur_id, prod_id, quantity)
+                cursor = db.execute_query(db_connection, query, data)
+                print('Added Purchase Product')
+                cursor.close()
+                return redirect(url_for('purchase_products'))
+        return render_template('add_purchase_product.j2')
 
 @app.route('/suppliers', methods=["GET","POST"])
 def suppliers():
