@@ -34,8 +34,13 @@ def products():
                 query = "SELECT * FROM Products;"
                 cursor = db.execute_query(db_connection=db_connection, query=query)
                 results = cursor.fetchall()
+                # Get Supplier names for display
+                query = "SELECT Supplier_id, Supplier_name FROM Suppliers;"
+                cursor = db.execute_query(db_connection, query)
+                supplier_data = cursor.fetchall()
+                supplier_names = {supplier['Supplier_id']:supplier['Supplier_name'] for supplier in supplier_data}
                 cursor.close()
-                return render_template("products.j2", products=results)
+                return render_template("products.j2", products=results, supplier_names=supplier_names)
         if request.method == "POST":
                 search_term = "%" + request.form['psearch'] +"%"
                 query = 'SELECT * FROM Products WHERE Product_name LIKE %s'
@@ -43,8 +48,13 @@ def products():
                 cursor = db.execute_query(db_connection, query, data)
                 results = cursor.fetchall()
                 print('Searching Products table for {}'.format(search_term))
+                # Get Supplier names for display
+                query = "SELECT Supplier_id, Supplier_name FROM Suppliers;"
+                cursor = db.execute_query(db_connection, query)
+                supplier_data = cursor.fetchall()
+                supplier_names = {supplier['Supplier_id']:supplier['Supplier_name'] for supplier in supplier_data}
                 cursor.close()
-                return render_template("products.j2", products=results)
+                return render_template("products.j2", products=results, supplier_names=supplier_names)
 
 @app.route('/add_product', methods=["GET","POST"])
 def add_product():
@@ -118,8 +128,13 @@ def orders():
                 query = "SELECT * FROM Orders;"
                 cursor = db.execute_query(db_connection=db_connection, query=query)
                 results = cursor.fetchall()
+                # Get Customer names for display
+                query = "SELECT Customer_id, Customer_name FROM Customers;"
+                cursor = db.execute_query(db_connection, query)
+                customer_data = cursor.fetchall()
+                customer_names = {customer['Customer_id']:customer['Customer_name'] for customer in customer_data}
                 cursor.close()
-                return render_template("orders.j2", orders=results)
+                return render_template("orders.j2", orders=results, customer_names=customer_names)
 
 @app.route('/add_order', methods=["GET","POST"])
 def add_order():
@@ -141,8 +156,13 @@ def order_products():
                 query = 'SELECT * FROM Order_products;'
                 cursor = db.execute_query(db_connection, query)
                 results = cursor.fetchall()
+                # Get Product names for display
+                query = "SELECT Product_id, Product_name FROM Products;"
+                cursor = db.execute_query(db_connection, query)
+                product_data = cursor.fetchall()
+                product_names = {product['Product_id']:product['Product_name'] for product in product_data}
                 cursor.close()
-                return render_template("order_products.j2", order_products=results)
+                return render_template("order_products.j2", order_products=results, product_names=product_names)
 
 @app.route('/add_order_product', methods=["GET","POST"])
 def add_order_product():
@@ -164,8 +184,13 @@ def purchase_products():
                 query = 'SELECT * FROM Purchase_products;'
                 cursor = db.execute_query(db_connection, query)
                 results = cursor.fetchall()
+                # Get Product names for display
+                query = "SELECT Product_id, Product_name FROM Products;"
+                cursor = db.execute_query(db_connection, query)
+                product_data = cursor.fetchall()
+                product_names = {product['Product_id']:product['Product_name'] for product in product_data}
                 cursor.close()
-                return render_template("purchase_products.j2", purchase_products=results)
+                return render_template("purchase_products.j2", purchase_products=results, product_names=product_names)
 
 @app.route('/add_purchase_product', methods=["GET","POST"])
 def add_purchase_product():
@@ -210,8 +235,13 @@ def purchases():
                 query = "SELECT * FROM Purchases;"
                 cursor = db.execute_query(db_connection=db_connection, query=query)
                 results = cursor.fetchall()
+                # Get Supplier names for display
+                query = "SELECT Supplier_id, Supplier_name FROM Suppliers;"
+                cursor = db.execute_query(db_connection, query)
+                supplier_data = cursor.fetchall()
+                supplier_names = {supplier['Supplier_id']:supplier['Supplier_name'] for supplier in supplier_data}
                 cursor.close()
-                return render_template("purchases.j2", purchases=results)
+                return render_template("purchases.j2", purchases=results, supplier_names=supplier_names)
 
 @app.route('/add_purchase', methods=["GET","POST"])
 def add_purchase():

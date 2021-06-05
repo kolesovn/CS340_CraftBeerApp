@@ -9,13 +9,17 @@
 <table>
     <tr>
     <th>ID</th>
-    <th>Supplier ID</th>
+    <th>Supplier</th>
     <th>Date</th>
     </tr>
     {% for purchase in purchases %}
         <tr>
         {% for key in purchase.keys() %}
+            {% if key == 'Supplier_id'%}
+            <td> {{ supplier_names[purchase['Supplier_id']] }}
+            {% else %}
             <td> {{ purchase[key] }} </td>
+            {% endif %}
         {% endfor %}
         </tr>
     {% endfor %}

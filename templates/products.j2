@@ -23,7 +23,11 @@
     {% for product in products %}
         <tr>
         {% for key in product.keys() %}
+            {% if key == 'Supplier_id'%}
+            <td> {{ supplier_names[product['Supplier_id']] }}
+            {% else %}
             <td> {{ product[key] }} </td>
+            {% endif %}
         {% endfor %}
         <td><form action="/delete_product/{{ product['Product_id'] }}">
                 <input type="submit" value="Delete"></form></td>

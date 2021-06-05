@@ -10,13 +10,17 @@
     <tr>
     <th>Purchase Product ID</th>
     <th>Purchase ID</th>
-    <th>Product ID</th>
+    <th>Product</th>
     <th>Quantity</th>
     </tr>
     {% for purchase_product in purchase_products %}
         <tr>
         {% for key in purchase_product.keys() %}
+            {% if key == 'Product_id'%}
+            <td> {{ product_names[purchase_product['Product_id']] }}
+            {% else %}
             <td> {{ purchase_product[key] }} </td>
+            {% endif %}
         {% endfor %}
         </tr>
     {% endfor %}

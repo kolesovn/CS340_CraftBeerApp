@@ -9,13 +9,17 @@
 <table>
     <tr>
     <th>ID</th>
-    <th>Customer ID</th>
+    <th>Customer</th>
     <th>Date</th>
     </tr>
     {% for order in orders %}
         <tr>
         {% for key in order.keys() %}
+            {% if key == 'Customer_id'%}
+            <td> {{ customer_names[order['Customer_id']] }}
+            {% else %}
             <td> {{ order[key] }} </td>
+            {% endif %}
         {% endfor %}
         </tr>
     {% endfor %}
