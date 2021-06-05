@@ -10,9 +10,11 @@ db_connection = db.connect_to_database()
 def root():
         return render_template("main.j2")
 
+
 @app.route('/index')
 def index():
         return render_template("index.j2")
+
 
 @app.route('/db-test')
 def db_test():
@@ -21,6 +23,7 @@ def db_test():
     results = cursor.fetchall()
     print(results)
     return render_template("db_test.j2", bsg_people=results)
+
 
 @app.route('/products', methods=["GET","POST"])
 def products():
@@ -50,6 +53,7 @@ def products():
                 cursor.close()
                 return render_template("products.j2", products=results, supplier_names=supplier_names)
 
+
 @app.route('/add_product', methods=["GET","POST"])
 def add_product():
         if request.method == "GET":
@@ -74,6 +78,7 @@ def add_product():
                 cursor.close()
                 return redirect(url_for('products'))
 
+
 @app.route('/delete_product/<int:id>')
 def delete_product(id):
         query = 'DELETE FROM Products WHERE Product_id = %s'
@@ -81,6 +86,7 @@ def delete_product(id):
         result = db.execute_query(db_connection, query, data)
         print(str(result.rowcount) + " row deleted")
         return redirect(url_for('products'))
+
 
 @app.route('/customers', methods=["GET","POST"])
 def customers():
@@ -90,6 +96,7 @@ def customers():
                 results = cursor.fetchall()
                 cursor.close()
                 return render_template("customers.j2", customers=results)
+
 
 @app.route('/add_customer', methods=["GET","POST"])
 def add_customer():
@@ -103,6 +110,7 @@ def add_customer():
                 cursor.close()
                 return redirect(url_for('customers'))
         return render_template('add_customer.j2')
+
 
 @app.route('/update_customer/<int:id>', methods=["GET","POST"])
 def update_customer(id):
@@ -124,6 +132,7 @@ def update_customer(id):
                 print(str(result.rowcount) + " row(s) updated")
                 return redirect(url_for('customers'))
 
+
 @app.route('/orders', methods=["GET","POST"])
 def orders():
         if request.method == "GET":
@@ -138,8 +147,18 @@ def orders():
                 cursor.close()
                 return render_template("orders.j2", orders=results, customer_names=customer_names)
 
+
 @app.route('/add_order', methods=["GET","POST"])
 def add_order():
+        if request.method == "GET":
+                # Get Customer names for display
+                query = "SELECT Customer_id, Customer_name FROM Customers;"
+                cursor = db.execute_query(db_connection, query)
+                customer_data = cursor.fetchall()
+                customer_names = [(customer['Customer_id'], customer['Customer_name']) for customer in customer_data]
+                cursor.close()
+                return render_template("add_order.j2", customer_names=customer_names)
+
         if request.method == "POST":
                 ord_cid = request.form['ord_cid']
                 ord_date = request.form['ord_date']
@@ -149,7 +168,6 @@ def add_order():
                 print('Added Order')
                 cursor.close()
                 return redirect(url_for('orders'))
-        return render_template('add_order.j2')
 
 
 @app.route('/order_products', methods=["GET"])
@@ -166,8 +184,24 @@ def order_products():
                 cursor.close()
                 return render_template("order_products.j2", order_products=results, product_names=product_names)
 
+
 @app.route('/add_order_product', methods=["GET","POST"])
 def add_order_product():
+        if request.method == "GET":
+                # Get Order IDs for display
+                query = "SELECT Order_id FROM Orders;"
+                cursor = db.execute_query(db_connection, query)
+                order_data = cursor.fetchall()
+                order_ids = [order['Order_id'] for order in order_data]
+                order_ids.sort()
+                # Get Product names for display
+                query = "SELECT Product_id, Product_name FROM Products;"
+                cursor = db.execute_query(db_connection, query)
+                product_data = cursor.fetchall()
+                product_names = [(product['Product_id'], product['Product_name']) for product in product_data]
+                cursor.close()
+                return render_template("add_order_product.j2", order_ids=order_ids, product_names=product_names)
+
         if request.method == "POST":
                 ord_id = request.form['ord_id']
                 prod_id = request.form['prod_id']
@@ -178,7 +212,7 @@ def add_order_product():
                 print('Added Order Product')
                 cursor.close()
                 return redirect(url_for('order_products'))
-        return render_template('add_order_product.j2')
+
 
 @app.route('/purchase_products', methods=["GET","POST"])
 def purchase_products():
@@ -194,8 +228,24 @@ def purchase_products():
                 cursor.close()
                 return render_template("purchase_products.j2", purchase_products=results, product_names=product_names)
 
+
 @app.route('/add_purchase_product', methods=["GET","POST"])
 def add_purchase_product():
+        if request.method == "GET":
+                # Get Purchase IDs for display
+                query = "SELECT Purchase_id FROM Purchases;"
+                cursor = db.execute_query(db_connection, query)
+                purchase_data = cursor.fetchall()
+                purchase_ids = [purchase['Purchase_id'] for purchase in purchase_data]
+                purchase_ids.sort()
+                # Get Product names for display
+                query = "SELECT Product_id, Product_name FROM Products;"
+                cursor = db.execute_query(db_connection, query)
+                product_data = cursor.fetchall()
+                product_names = [(product['Product_id'], product['Product_name']) for product in product_data]
+                cursor.close()
+                return render_template("add_purchase_product.j2", purchase_ids=purchase_ids, product_names=product_names)
+
         if request.method == "POST":
                 pur_id = request.form['pur_id']
                 prod_id = request.form['prod_id']
@@ -206,7 +256,7 @@ def add_purchase_product():
                 print('Added Purchase Product')
                 cursor.close()
                 return redirect(url_for('purchase_products'))
-        return render_template('add_purchase_product.j2')
+
 
 @app.route('/suppliers', methods=["GET","POST"])
 def suppliers():
@@ -216,6 +266,7 @@ def suppliers():
                 results = cursor.fetchall()
                 cursor.close()
                 return render_template("suppliers.j2", suppliers=results)
+
 
 @app.route('/add_supplier', methods=["GET","POST"])
 def add_supplier():
@@ -231,6 +282,7 @@ def add_supplier():
                 return redirect(url_for('suppliers'))
         return render_template('add_supplier.j2')
 
+
 @app.route('/purchases', methods=["GET","POST"])
 def purchases():
         if request.method == "GET":
@@ -245,8 +297,18 @@ def purchases():
                 cursor.close()
                 return render_template("purchases.j2", purchases=results, supplier_names=supplier_names)
 
+
 @app.route('/add_purchase', methods=["GET","POST"])
 def add_purchase():
+        if request.method == "GET":
+                # Get Supplier names for display
+                query = "SELECT Supplier_id, Supplier_name FROM Suppliers;"
+                cursor = db.execute_query(db_connection, query)
+                supplier_data = cursor.fetchall()
+                supplier_names = [(supplier['Supplier_id'], supplier['Supplier_name']) for supplier in supplier_data]
+                cursor.close()
+                return render_template("add_purchase.j2", supplier_names=supplier_names)
+
         if request.method == "POST":
                 pur_sid = request.form['pur_sid']
                 pur_date = request.form['pur_date']
@@ -256,7 +318,6 @@ def add_purchase():
                 print('Added Purchase')
                 cursor.close()
                 return redirect(url_for('purchases'))
-        return render_template('add_purchase.j2')
 
 
 if __name__=="__main__":

@@ -2,8 +2,13 @@
 {% block content %}
 <h4>Add Order:</h4>
 <form action="/add_purchase" method="POST">
-   Supplier ID: <input type="text" name="pur_sid" required>
-   Date: <input type="text" name="pur_date" required>
+   Supplier: <select name="pur_sid">
+	<!-- display all suppliers inside this dropdown -->
+        {% for supplier in supplier_names %}
+          <option value="{{ supplier[0] }}">{{ supplier[1] }}</option>
+        {% endfor %}  
+        </select><br> 
+   Date: <input type="text" name="pur_date" placeholder="YYYY-MM-DD" required>
    <input type="submit" value="Submit">
   </form>
 <br>

@@ -2,8 +2,17 @@
 {% block content %}
 <h4>Add Order Product:</h4>
 <form action="/add_order_product" method="POST">
-   Order ID: <input type="text" name="ord_id" required>
-   Product ID: <input type="text" name="prod_id" required>
+   Order ID: <select name="ord_id">
+        {% for order_id in order_ids %}
+          <option value="{{ order_id }}">{{ order_id }}</option>
+          {% endfor %}
+          </select><br>
+   Product: <select name="prod_id">
+	<!-- display all Products inside this dropdown -->
+        {% for product in product_names %}
+          <option value="{{ product[0] }}">{{ product[1] }}</option>
+        {% endfor %}  
+        </select><br> 
    Quantity: <input type="text" name="quan" required>
    <input type="submit" value="Submit">
   </form>
