@@ -3,7 +3,12 @@
 <h4>Add Product:</h4>
 <form action="/add_product" method="POST">
    Name: <input type="text" name="pname" required><br>
-   Supplier ID: <input type="number" name="p_sid" required><br>
+   Supplier: <select name="p_sid">
+	<!-- display all suppliers inside this dropdown -->
+        {% for supplier in supplier_names %}
+          <option value="{{ supplier[0] }}">{{ supplier[1] }}</option>
+        {% endfor %}  
+        </select><br> 
    Unit Cost: <input type="number" name="p_cost" required><br>
    Unit Price: <input type="number" name="p_price" required><br>
    Quantity: <input type="number" name="p_quan" required><br>

@@ -5,12 +5,6 @@ import database.db_connector as db
 app = Flask(__name__)
 db_connection = db.connect_to_database()
 
-#Sample data
-purchase_products_headers = ("Purchase_ID", "Product_ID", "Quantity")
-purchase_products_data = [[1, 2, 5],
-                        [1, 3, 10],
-                        [2, 1, 15]]
-
 
 @app.route('/')
 def root():
@@ -58,6 +52,15 @@ def products():
 
 @app.route('/add_product', methods=["GET","POST"])
 def add_product():
+        if request.method == "GET":
+                # Get Supplier names for display
+                query = "SELECT Supplier_id, Supplier_name FROM Suppliers;"
+                cursor = db.execute_query(db_connection, query)
+                supplier_data = cursor.fetchall()
+                supplier_names = [(supplier['Supplier_id'], supplier['Supplier_name']) for supplier in supplier_data]
+                cursor.close()
+                return render_template("add_product.j2", supplier_names=supplier_names)
+
         if request.method == "POST":
                 pname = request.form['pname']
                 p_sid = request.form['p_sid']
@@ -70,7 +73,6 @@ def add_product():
                 print('Added product')
                 cursor.close()
                 return redirect(url_for('products'))
-        return render_template('add_product.j2')
 
 @app.route('/delete_product/<int:id>')
 def delete_product(id):
