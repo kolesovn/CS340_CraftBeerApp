@@ -233,16 +233,16 @@ def purchase_products():
 def add_purchase_product():
         if request.method == "GET":
                 # Get Purchase IDs for display
-                query = "SELECT Purchase_id FROM Purchases;"
+                query = "SELECT Purchase_id, Supplier_id FROM Purchases;"
                 cursor = db.execute_query(db_connection, query)
                 purchase_data = cursor.fetchall()
                 purchase_ids = [purchase['Purchase_id'] for purchase in purchase_data]
                 purchase_ids.sort()
                 # Get Product names for display
-                query = "SELECT Product_id, Product_name FROM Products;"
+                query = "SELECT Product_id, Product_name, Supplier_id FROM Products;"
                 cursor = db.execute_query(db_connection, query)
                 product_data = cursor.fetchall()
-                product_names = [(product['Product_id'], product['Product_name']) for product in product_data]
+                product_names = [(product['Product_id'], product['Product_name'], product['Supplier_id']) for product in product_data]
                 cursor.close()
                 return render_template("add_purchase_product.j2", purchase_ids=purchase_ids, product_names=product_names)
 
