@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS `Customers`;
 CREATE TABLE `Customers` (
   `Customer_id` int(11) NOT NULL,
   `Customer_name` varchar(50) NOT NULL,
-  `Customer_phone` varchar(50) NOT NULL
+  `Customer_phone` varchar(50)
 )ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -46,7 +46,7 @@ DROP TABLE IF EXISTS `Products`;
 CREATE TABLE `Products` (
   `Product_id` int(11) NOT NULL,
   `Product_name` varchar(50) NOT NULL,
-  `Supplier_id` int(11) NOT NULL,
+  `Supplier_id` int(11),
   `Unit_cost` decimal(10,0) NOT NULL,
   `Unit_price` decimal(10,0) NOT NULL,
   `Quantity` int(11) DEFAULT NULL 

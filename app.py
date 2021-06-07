@@ -1,4 +1,4 @@
-from flask import Flask, render_template, json, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for
 import os
 import database.db_connector as db
 
@@ -102,7 +102,9 @@ def add_customer():
 def update_customer(id):
         if request.method == "GET":
                 customer_query = 'SELECT Customer_id, Customer_name, Customer_phone FROM Customers WHERE Customer_id = %s' % (id)
-                customer_result = db.execute_query(db_connection, customer_query).fetchone()
+                cursor = db.execute_query(db_connection, customer_query)
+                customer_result = cursor.fetchone()
+                cursor.close()
                 if not customer_result:
                         return "No such Customer"
                 else:
@@ -112,13 +114,13 @@ def update_customer(id):
                 customer_id = request.form['cid']
                 customer_name = request.form['cname']
                 customer_phone = request.form['cphone']
-                if customer_name == '' and customer_phone == '':
-                        query = 'UPDATE Customers SET Customer_name = NULL, Customer_phone = NULL WHERE Customer_id = %s'
-                        data = (customer_id,)
-                elif customer_name == '':
-                        query = 'UPDATE Customers SET Customer_name = NULL, Customer_phone = %s WHERE Customer_id = %s'
-                        data = (customer_phone, customer_id)
-                elif customer_phone == '':
+                # if customer_name == '' and customer_phone == '':
+                #         query = 'UPDATE Customers SET Customer_name = NULL, Customer_phone = NULL WHERE Customer_id = %s'
+                #         data = (customer_id,)
+                # elif customer_name == '':
+                #         query = 'UPDATE Customers SET Customer_name = NULL, Customer_phone = %s WHERE Customer_id = %s'
+                #         data = (customer_phone, customer_id)
+                if customer_phone == '':
                         query = 'UPDATE Customers SET Customer_name = %s, Customer_phone = NULL WHERE Customer_id = %s'
                         data = (customer_name, customer_id)
                 else:
@@ -127,6 +129,7 @@ def update_customer(id):
                 print(data)
                 result = db.execute_query(db_connection, query, data)
                 print(str(result.rowcount) + " row(s) updated")
+                result.close()
                 return redirect(url_for('customers'))
 
 

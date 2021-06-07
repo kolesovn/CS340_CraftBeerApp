@@ -37,3 +37,5 @@ DELETE FROM Products WHERE Product_id = %s
 
 -- Update Query
 UPDATE `Customers` SET `Customer_name` = :cus_name, `Customer_phone` = :cus_phone WHERE `Customer_id` = :cidinput;
+-- Nullable Update
+UPDATE Customers SET Customer_name = %s, Customer_phone = NULL WHERE Customer_id = %s
