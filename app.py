@@ -112,8 +112,19 @@ def update_customer(id):
                 customer_id = request.form['cid']
                 customer_name = request.form['cname']
                 customer_phone = request.form['cphone']
-                query = 'UPDATE Customers SET Customer_name = %s, Customer_phone = %s WHERE Customer_id = %s'
-                data = (customer_name, customer_phone, customer_id)
+                if customer_name == '' and customer_phone == '':
+                        query = 'UPDATE Customers SET Customer_name = NULL, Customer_phone = NULL WHERE Customer_id = %s'
+                        data = (customer_id,)
+                elif customer_name == '':
+                        query = 'UPDATE Customers SET Customer_name = NULL, Customer_phone = %s WHERE Customer_id = %s'
+                        data = (customer_phone, customer_id)
+                elif customer_phone == '':
+                        query = 'UPDATE Customers SET Customer_name = %s, Customer_phone = NULL WHERE Customer_id = %s'
+                        data = (customer_name, customer_id)
+                else:
+                        query = 'UPDATE Customers SET Customer_name = %s, Customer_phone = %s WHERE Customer_id = %s'
+                        data = (customer_name, customer_phone, customer_id)
+                print(data)
                 result = db.execute_query(db_connection, query, data)
                 print(str(result.rowcount) + " row(s) updated")
                 return redirect(url_for('customers'))
